@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}View Bids — FreelancerPro{% endblock %}
+{% block content %}
+
+<div class="container section-padding">
+    <div style="margin-bottom: 3rem;">
+        <a href="{% url 'dashboard' %}" class="nav-link" style="margin-bottom: 1rem; display: inline-block;">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+        <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Bids for "{{ project.title }}"</h1>
+        <p style="color: var(--text-muted);">You have received {{ bids.count }} proposals for this project.</p>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 2rem;">
+        {% for bid in bids %}
+            <div class="card fade-in-up" style="padding: 2.5rem; {% if bid.status == 'accepted' %}border: 2px solid var(--success);{% elif bid.status == 'rejected' %}opacity: 0.6;{% endif %}">
+                <div class="bid-card-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem;">
+                    <div style="display: flex; align-items: center; gap: 1.5rem;">
+                        <div style="width: 64px; height: 64px; border-radius: 16px; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800;">
+                            {{ bid.freelancer.username|slice:":1"|upper }}
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.25rem; margin-bottom: 0.25rem;">{{ bid.freelancer.username }}</h3>
+                            <div style="display: flex; gap: 1.5rem; font-size: 0.85rem; color: var(--text-muted);">
+                                <span><i class="fas fa-star" style="color: #f59e0b;"></i> New Freelancer</span>
+                                <span><i class="fas fa-clock"></i> Bid {{ bid.created_at|timesince }} ago</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align: right;">
+                        <p style="font-size: 1.5rem; font-weight: 800; color: var(--secondary); margin: 0;">${{ bid.amount }}</p>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Total Bid Amount</p>
+                        {% if bid.status != 'pending' %}
+                            <span class="badge {% if bid.status == 'accepted' %}badge-success{% else %}badge-warning{% endif %}" style="margin-top: 0.5rem;">{{ bid.status|upper }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div style="background: var(--background); padding: 1.5rem; border-radius: var(--radius-md); margin-bottom: 2rem;">
+                    <h4 style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 1rem;">Proposal</h4>
+                    <p style="line-height: 1.7; color: var(--text-main);">{{ bid.proposal }}</p>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                    {% if bid.status == 'accepted' %}
+                        <a href="{% url 'chat' project.id bid.freelancer.id %}" class="btn btn-primary" style="padding: 0.75rem 2rem;">
+                            <i class="fas fa-comments"></i> Start Conversation
+                        </a>
+                    {% elif bid.status == 'pending' %}
+                        <a href="{% url 'reject_bid' bid.id %}" class="btn btn-outline" style="color: var(--danger); border-color: rgba(239, 68, 68, 0.2);">
+                            Reject
+                        </a>
+                        <a href="{% url 'select_freelancer' bid.id %}" class="btn btn-primary" style="padding: 0.75rem 2rem;">
+                            Accept Bid
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <div class="glass flex-center" style="padding: 6rem; text-align: center; flex-direction: column; border-radius: 24px;">
+                <div style="font-size: 4rem; margin-bottom: 1.5rem;">📫</div>
+                <h3 style="font-size: 1.75rem;">No bids yet</h3>
+                <p style="color: var(--text-muted); max-width: 400px; margin: 1rem auto 2rem;">Your project is live! You'll receive proposals from top freelancers soon.</p>
+                <a href="{% url 'dashboard' %}" class="btn btn-outline">Back to Dashboard</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

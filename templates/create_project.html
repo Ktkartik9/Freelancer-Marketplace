@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% block title %}Post a Project — FreelancerPro{% endblock %}
+{% block content %}
+
+<div class="container section-padding">
+    <div style="max-width: 800px; margin: 0 auto;">
+        <div class="fade-in-up" style="margin-bottom: 3rem; text-align: center;">
+            <div class="stat-icon" style="margin: 0 auto 1.5rem; width: 64px; height: 64px; font-size: 1.5rem; background: var(--primary-soft); color: var(--primary);">
+                <i class="fas fa-magic"></i>
+            </div>
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">Post a New Project</h1>
+            <p style="color: var(--text-muted);">Get competitive bids from the world's best freelancers in minutes.</p>
+        </div>
+
+        <div class="card fade-in-up">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div style="padding-bottom: 2rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border-light);">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--secondary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700;">1</div>
+                        <h3 style="font-size: 1.25rem; margin: 0;">Project Details</h3>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.title.id_for_label }}">Project Title</label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <p style="color: var(--danger); font-size: 0.8rem; margin-top: 0.5rem;">{{ form.title.errors.0 }}</p>
+                        {% endif %}
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Keep it short and descriptive to attract the right talent.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.description.id_for_label }}">Detailed Description</label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <p style="color: var(--danger); font-size: 0.8rem; margin-top: 0.5rem;">{{ form.description.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div style="padding-bottom: 2rem; margin-bottom: 2rem; border-bottom: 1px solid var(--border-light);">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--secondary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700;">2</div>
+                        <h3 style="font-size: 1.25rem; margin: 0;">Budget & Requirements</h3>
+                    </div>
+
+                    <div class="two-col-form">
+                        <div class="form-group">
+                            <label class="form-label" for="{{ form.budget.id_for_label }}">Maximum Budget ($)</label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-weight: 700; color: var(--text-muted);">$</span>
+                                {{ form.budget }}
+                            </div>
+                            {% if form.budget.errors %}
+                                <p style="color: var(--danger); font-size: 0.8rem; margin-top: 0.5rem;">{{ form.budget.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="{{ form.deadline.id_for_label }}">Deadline</label>
+                            {{ form.deadline }}
+                            {% if form.deadline.errors %}
+                                <p style="color: var(--danger); font-size: 0.8rem; margin-top: 0.5rem;">{{ form.deadline.errors.0 }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="{{ form.skills_required.id_for_label }}">Skills Required (Comma separated)</label>
+                        <div style="position: relative;">
+                            <i class="fas fa-tags" style="position: absolute; left: 1.25rem; top: 1.15rem; color: var(--text-muted);"></i>
+                            {{ form.skills_required }}
+                        </div>
+                        {% if form.skills_required.errors %}
+                            <p style="color: var(--danger); font-size: 0.8rem; margin-top: 0.5rem;">{{ form.skills_required.errors.0 }}</p>
+                        {% endif %}
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">Help freelancers find your project by adding relevant skills.</p>
+                    </div>
+                </div>
+
+
+                <div style="display: flex; justify-content: flex-end; gap: 1rem; align-items: center;">
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">By posting, you agree to our Terms of Service.</p>
+                    <button type="submit" class="btn btn-primary" style="padding: 1rem 2.5rem;">
+                        Post Project Now <i class="fas fa-paper-plane" style="margin-left: 0.5rem;"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

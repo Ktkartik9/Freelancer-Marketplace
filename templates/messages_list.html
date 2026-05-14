@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Messages — FreelancerPro{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+    <div style="margin-bottom: 2.5rem;">
+        <h1 style="margin: 0;">Messages</h1>
+        <p style="color: var(--text-muted); margin-top: 0.25rem;">Stay connected with your collaborators.</p>
+    </div>
+
+    <div class="grid" style="grid-template-columns: 1fr; max-width: 800px; margin: 0 auto;">
+        {% for conv in conversations %}
+        <a href="{% url 'chat' conv.project.id conv.other_user.id %}" class="card" style="display: flex; gap: 1.5rem; align-items: center; padding: 1.5rem 2rem; margin-bottom: 1rem;">
+            <div style="width: 60px; height: 60px; border-radius: 16px; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; flex-shrink: 0;">
+                {{ conv.other_user.username|slice:":1"|upper }}
+            </div>
+            <div style="flex-grow: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                    <h3 style="margin: 0; font-size: 1.15rem;">{{ conv.other_user.username }}</h3>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">{{ conv.last_message.timestamp|timesince }} ago</span>
+                </div>
+                <p style="font-size: 0.9rem; font-weight: 600; color: var(--primary); margin-bottom: 0.25rem;">{{ conv.project.title }}</p>
+                <p style="font-size: 0.9rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 400px;">
+                    {{ conv.last_message.content }}
+                </p>
+            </div>
+            <div style="color: var(--primary);">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </a>
+        {% empty %}
+        <div class="card" style="padding: 5rem; text-align: center; color: var(--text-muted);">
+            <div style="width: 80px; height: 80px; background: var(--background); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem; font-size: 2rem; opacity: 0.5;">
+                <i class="fas fa-envelope-open"></i>
+            </div>
+            <h3>No conversations yet</h3>
+            <p style="margin-top: 1rem;">When you message a client or freelancer, they'll appear here.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

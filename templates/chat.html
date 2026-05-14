@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Messages — FreelancerPro{% endblock %}
+
+{% block full_content %}
+<div class="chat-page" style="height: calc(100vh - var(--navbar-height)); margin-top: var(--navbar-height); display: flex; flex-direction: column; background: var(--background); transition: var(--transition-smooth);">
+
+    <!-- Mobile: header bar with back button -->
+    <div class="chat-mobile-topbar">
+        <button class="chat-back-btn" id="chat-back-btn" onclick="history.back()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <div class="chat-mobile-user">
+            <div class="chat-avatar chat-avatar-sm">{{ other_user.username|slice:":1"|upper }}</div>
+            <div>
+                <h4 style="margin:0; font-size:0.95rem;">{{ other_user.username }}</h4>
+                <p class="chat-online-badge"><span class="online-dot"></span> Online</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="chat-layout">
+
+        <!-- ======= SIDEBAR ======= -->
+        <aside class="chat-sidebar" id="chat-sidebar">
+            <div class="chat-sidebar-header">
+                <h3>Messages</h3>
+                <button class="chat-sidebar-close" id="chat-sidebar-close"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="chat-search-wrap">
+                <i class="fas fa-search chat-search-icon"></i>
+                <input type="text" class="form-control chat-search-input" placeholder="Search conversations...">
+            </div>
+
+            <div class="chat-contacts-list">
+                <div class="chat-contact active-contact">
+                    <div class="chat-avatar">{{ other_user.username|slice:":1"|upper }}</div>
+                    <div class="chat-contact-info">
+                        <div class="chat-contact-row">
+                            <h4 class="chat-contact-name">{{ other_user.username }}</h4>
+                            <span class="chat-time">Just now</span>
+                        </div>
+                        <p class="chat-contact-preview">{{ project.title }}</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ======= MAIN CHAT AREA ======= -->
+        <main class="chat-main">
+
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="chat-header-left">
+                    <button class="chat-sidebar-toggle" id="chat-sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="chat-avatar chat-avatar-sm">{{ other_user.username|slice:":1"|upper }}</div>
+                    <div>
+                        <h4 class="chat-header-name">{{ other_user.username }}</h4>
+                        <p class="chat-online-badge"><span class="online-dot"></span> Online</p>
+                    </div>
+                </div>
+                <div class="chat-header-actions">
+                    <button class="btn btn-outline chat-action-btn" title="Call"><i class="fas fa-phone"></i></button>
+                    <button class="btn btn-outline chat-action-btn" title="Video"><i class="fas fa-video"></i></button>
+                    <button class="btn btn-outline chat-action-btn" title="Info"><i class="fas fa-info-circle"></i></button>
+                </div>
+            </div>
+
+            <!-- Message Thread -->
+            <div class="chat-messages-area" id="chat-messages-area">
+
+                <!-- Project context pill -->
+                <div class="chat-context-pill">
+                    <i class="fas fa-briefcase" style="margin-right:0.4rem;"></i>
+                    {{ project.title }}
+                </div>
+
+                {% for message in messages %}
+                <div class="chat-message-row {% if message.sender == request.user %}chat-message-out{% else %}chat-message-in{% endif %}">
+                    {% if message.sender != request.user %}
+                    <div class="chat-avatar chat-avatar-xs">{{ other_user.username|slice:":1"|upper }}</div>
+                    {% endif %}
+                    <div class="chat-bubble-wrap">
+                        <div class="chat-bubble {% if message.sender == request.user %}chat-bubble-out{% else %}chat-bubble-in{% endif %}">
+                            {{ message.content }}
+                        </div>
+                        <span class="chat-timestamp">{{ message.timestamp|date:"H:i" }}</span>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="chat-empty-state">
+                    <i class="fas fa-comments"></i>
+                    <p>No messages yet. Start the conversation!</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Input Area -->
+            <div class="chat-input-area">
+                <form method="POST" class="chat-input-form">
+                    {% csrf_token %}
+                    <button type="button" class="chat-input-action" title="Emoji"><i class="far fa-smile"></i></button>
+                    <button type="button" class="chat-input-action" title="Attach"><i class="fas fa-paperclip"></i></button>
+                    <input
+                        type="text"
+                        name="content"
+                        class="form-control chat-input-field"
+                        placeholder="Type your message…"
+                        autocomplete="off"
+                        required
+                    >
+                    <button type="submit" class="btn btn-primary chat-send-btn" title="Send">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<script>
+(function() {
+    // Auto-scroll to bottom of messages
+    const area = document.getElementById('chat-messages-area');
+    if (area) area.scrollTop = area.scrollHeight;
+
+    // Sidebar toggle for tablet/mobile
+    const toggleBtn = document.getElementById('chat-sidebar-toggle');
+    const sidebar   = document.getElementById('chat-sidebar');
+    const closeBtn  = document.getElementById('chat-sidebar-close');
+
+    if (toggleBtn && sidebar) {
+        toggleBtn.addEventListener('click', () => sidebar.classList.toggle('chat-sidebar-open'));
+    }
+    if (closeBtn && sidebar) {
+        closeBtn.addEventListener('click', () => sidebar.classList.remove('chat-sidebar-open'));
+    }
+})();
+</script>
+{% endblock %}

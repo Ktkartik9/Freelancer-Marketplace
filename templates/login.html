@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Sign In — FreelancerPro{% endblock %}
+{% block content %}
+<div class="login-page-wrapper">
+    <div class="login-card card glass shadow-xl fade-in-up">
+
+        <!-- Header -->
+        <div class="login-header">
+            <div class="login-logo-icon">💠</div>
+            <h1 class="login-title">Welcome Back</h1>
+            <p class="login-subtitle">Sign in to your FreelancerPro account</p>
+        </div>
+
+        <!-- Non-field errors banner -->
+        {% if form.non_field_errors %}
+        <div class="login-error-banner">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>{{ form.non_field_errors.0 }}</span>
+        </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'login' %}" novalidate>
+            {% csrf_token %}
+
+            <!-- Email Field -->
+            <div class="form-group">
+                <label class="form-label" for="{{ form.email.id_for_label }}">Email Address</label>
+                <div class="input-icon-wrap">
+                    <i class="far fa-envelope input-icon-left"></i>
+                    {{ form.email }}
+                </div>
+                {% if form.email.errors %}
+                    <p class="field-error">
+                        <i class="fas fa-circle-exclamation"></i> {{ form.email.errors.0 }}
+                    </p>
+                {% endif %}
+            </div>
+
+            <!-- Password Field -->
+            <div class="form-group">
+                <div class="password-label-row">
+                    <label class="form-label" for="{{ form.password.id_for_label }}">Password</label>
+                    <a href="{% url 'password_reset' %}" class="forgot-link">Forgot Password?</a>
+                </div>
+                <div class="input-icon-wrap">
+                    <i class="fas fa-lock input-icon-left"></i>
+                    {{ form.password }}
+                    <i class="far fa-eye toggle-password input-icon-right" title="Toggle password visibility"></i>
+                </div>
+                {% if form.password.errors %}
+                    <p class="field-error">
+                        <i class="fas fa-circle-exclamation"></i> {{ form.password.errors.0 }}
+                    </p>
+                {% endif %}
+            </div>
+
+            <!-- Remember Me -->
+            <div class="remember-row">
+                <label class="remember-label">
+                    <input type="checkbox" name="remember" class="remember-check">
+                    <span>Remember me for 30 days</span>
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary login-submit-btn">
+                Sign In <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+
+        <!-- Footer Link -->
+        <div class="login-footer-text">
+            Don't have an account?
+            <a href="{% url 'register' %}" class="login-register-link">Join for free</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

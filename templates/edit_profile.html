@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Edit Profile — FreelancerPro{% endblock %}
+
+{% block content %}
+<section class="section-padding" style="background: var(--background); min-height: 100vh; transition: var(--transition-smooth);">
+    <div class="container">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div style="margin-bottom: 2.5rem; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <h1 style="margin: 0;">Edit Your Profile</h1>
+                    <p style="color: var(--text-muted); margin-top: 0.25rem;">Complete your profile to stand out to the community.</p>
+                </div>
+                <a href="{% url 'profile' %}" class="btn btn-outline">View Profile</a>
+            </div>
+
+            <div class="card shadow-lg" style="padding: 4rem;">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div style="display: flex; align-items: center; gap: 3rem; margin-bottom: 4rem; padding-bottom: 3rem; border-bottom: 1px solid var(--border-light);">
+                        <div style="position: relative;">
+                            {% if profile.profile_image %}
+                                <img src="{{ profile.profile_image.url }}" alt="Profile" style="width: 120px; height: 120px; border-radius: 24px; object-fit: cover;">
+                            {% else %}
+                                <div style="width: 120px; height: 120px; border-radius: 24px; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 800;">
+                                    {{ user.username|slice:":1"|upper }}
+                                </div>
+                            {% endif %}
+                            <label for="{{ form.profile_image.id_for_label }}" style="position: absolute; bottom: -10px; right: -10px; width: 40px; height: 40px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 4px solid var(--surface); box-shadow: var(--shadow-md);">
+                                <i class="fas fa-camera"></i>
+                            </label>
+                            <input type="file" name="profile_image" id="{{ form.profile_image.id_for_label }}" style="display: none;">
+                        </div>
+                        <div>
+                            <h3 style="margin-bottom: 0.5rem;">Profile Photo</h3>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">Upload a professional photo. Min size 200x200px.</p>
+                            <div style="display: flex; gap: 1rem;">
+                                <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('{{ form.profile_image.id_for_label }}').click()">Upload New</button>
+                                <button type="button" class="btn btn-outline btn-sm" style="color: var(--danger); border-color: transparent;">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="two-col-form">
+                        <div class="form-group">
+                            <label class="form-label">Location (City)</label>
+                            <input type="text" name="city" class="form-control" value="{{ profile.city }}" placeholder="e.g. Indore">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Country</label>
+                            <input type="text" name="country" class="form-control" value="{{ profile.country }}" placeholder="e.g. India">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Skills (Comma separated)</label>
+                        <input type="text" name="skills" class="form-control" value="{{ profile.skills }}" placeholder="e.g. Python, Django, React">
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">These skills will help clients find you.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Years of Experience</label>
+                        <input type="number" name="experience" class="form-control" value="{{ profile.experience|default:0 }}" min="0">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Professional Bio</label>
+                        <textarea name="bio" class="form-control" rows="6" placeholder="Tell the community about yourself, your background and what you're passionate about...">{{ profile.bio }}</textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 1.5rem; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border-light);">
+                        <button type="submit" class="btn btn-primary btn-lg" style="flex: 2;">Save Profile Changes</button>
+                        <a href="{% url 'profile' %}" class="btn btn-outline btn-lg" style="flex: 1;">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

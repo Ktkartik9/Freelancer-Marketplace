@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}My Bids — FreelancerPro{% endblock %}
+
+{% block content %}
+<div class="container" style="padding-top: 2rem; padding-bottom: 4rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
+        <div>
+            <h1 style="margin: 0;">My Bids</h1>
+            <p style="color: var(--text-muted); margin-top: 0.25rem;">Track the status of your project proposals.</p>
+        </div>
+        <a href="{% url 'project_list' %}" class="btn btn-primary">
+            <i class="fas fa-search"></i> Find More Work
+        </a>
+    </div>
+
+    <div class="card table-wrapper" style="padding: 0;">
+        <div style="overflow-x: auto; min-width: 0;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--border); background: var(--background);">
+                        <th style="padding: 1.25rem 2rem; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Project Title</th>
+                        <th style="padding: 1.25rem 2rem; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Your Bid</th>
+                        <th style="padding: 1.25rem 2rem; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Date Submitted</th>
+                        <th style="padding: 1.25rem 2rem; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Status</th>
+                        <th style="padding: 1.25rem 2rem; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.05em;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for bid in bids %}
+                    <tr style="border-bottom: 1px solid var(--border-light); transition: var(--transition-fast);" onmouseover="this.style.background='var(--primary-soft)'" onmouseout="this.style.background='transparent'">
+                        <td style="padding: 1.5rem 2rem;">
+                            <h4 style="margin: 0 0 0.25rem 0;">{{ bid.project.title }}</h4>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0;">Client: {{ bid.project.client.username }}</p>
+                        </td>
+                        <td style="padding: 1.5rem 2rem;">
+                            <span style="font-weight: 700; color: var(--secondary);">${{ bid.amount }}</span>
+                        </td>
+                        <td style="padding: 1.5rem 2rem; color: var(--text-muted); font-size: 0.9rem;">
+                            {{ bid.created_at|date:"M d, Y" }}
+                        </td>
+                        <td style="padding: 1.5rem 2rem;">
+                            {% if bid.status == 'accepted' %}
+                                <span class="badge badge-success">Accepted</span>
+                            {% elif bid.status == 'rejected' %}
+                                <span class="badge badge-danger">Rejected</span>
+                            {% else %}
+                                <span class="badge badge-primary">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td style="padding: 1.5rem 2rem;">
+                            <a href="{% url 'project_detail' bid.project.id %}" class="btn btn-outline btn-sm" style="padding: 0.5rem 1rem; font-size: 0.8rem; border-radius: 8px;">View Project</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" style="padding: 4rem; text-align: center; color: var(--text-muted);">
+                            <i class="fas fa-gavel" style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.2;"></i>
+                            <p>You haven't placed any bids yet.</p>
+                            <a href="{% url 'project_list' %}" style="color: var(--primary); font-weight: 600; margin-top: 1rem; display: inline-block;">Browse projects now</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FreelancerPro | Premium Talent Marketplace{% endblock %}</title>
+    
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<!-- Toast Notifications -->
+<div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px;">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="toast {{ message.tags }}">
+                <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                <span>{{ message }}</span>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<nav class="navbar">
+    <div class="container navbar-inner">
+        <a href="/" class="logo" id="site-logo" title="Click to toggle dark mode">
+            <span class="logo-icon" style="font-size: 1.8rem;">💠</span>
+            <span class="logo-text">FreelancerPro</span>
+        </a>
+
+        <div class="nav-links" id="nav-links">
+            <a href="{% url 'project_list' %}" class="nav-link">Browse Projects</a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
+                <div class="user-profile-nav" style="display: flex; align-items: center; gap: 1.25rem; margin-left: 1rem; padding-left: 1.5rem; border-left: 1px solid var(--border);">
+                    <a href="{% url 'profile' %}" style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="text-align: right;">
+                            <p style="font-weight: 700; font-size: 0.95rem; margin: 0; color: var(--secondary);">{{ user.username }}</p>
+                            <p style="font-size: 0.7rem; color: var(--text-muted); margin: 0; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;">{{ user.role }}</p>
+                        </div>
+                    </a>
+                    <a href="{% url 'logout' %}" class="btn btn-outline" style="padding: 0.5rem 1rem; font-size: 0.85rem; border-radius: 10px;">Logout</a>
+                </div>
+            {% else %}
+                <a href="{% url 'login' %}" class="nav-link">Log In</a>
+                <a href="{% url 'register' %}" class="btn btn-primary" style="padding: 0.7rem 1.5rem;">Join SkillSwap</a>
+            {% endif %}
+            
+            <button id="theme-toggle" class="btn btn-outline" style="padding: 0.5rem; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; margin-left: 1rem;">
+                <i class="fas fa-moon" id="theme-icon"></i>
+            </button>
+        </div>
+
+        <div class="menu-toggle" id="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+</nav>
+
+<main style="min-height: 100vh; padding-top: var(--navbar-height);">
+    {% block full_content %}
+        {% block content %}{% endblock %}
+    {% endblock %}
+</main>
+
+
+<footer class="footer-professional" style="background: var(--surface); border-top: 1px solid var(--border-light); padding: 5rem 0 2rem; margin-top: 4rem; transition: var(--transition-smooth);">
+    <div class="container">
+        <div class="footer-grid" style="margin-bottom: 4rem;">
+            <div>
+                <a href="/" class="logo" style="margin-bottom: 1.5rem; display: flex;">
+                    <span class="logo-icon">💠</span>
+                    <span class="logo-text">FreelancerPro</span>
+                </a>
+                <p style="color: var(--text-muted); font-size: 0.95rem; max-width: 320px; margin-bottom: 2rem;">
+                    The premium marketplace for top-tier freelancers and visionary clients. Build your dream team today.
+                </p>
+                <div class="footer-social" style="display: flex; gap: 1rem;">
+                    <a href="#" style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; transition: var(--transition-fast);"><i class="fab fa-twitter"></i></a>
+                    <a href="#" style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; transition: var(--transition-fast);"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary-soft); color: var(--primary); display: flex; align-items: center; justify-content: center; transition: var(--transition-fast);"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            
+            <div>
+                <h4 style="margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--secondary);">Platform</h4>
+                <ul style="display: flex; flex-direction: column; gap: 1rem;">
+                    <li><a href="{% url 'project_list' %}" style="color: var(--text-muted); font-size: 0.95rem; transition: var(--transition-fast);">Browse Projects</a></li>
+                    <li><a href="#" style="color: var(--text-muted); font-size: 0.95rem; transition: var(--transition-fast);">Find Talent</a></li>
+                    <li><a href="#" style="color: var(--text-muted); font-size: 0.95rem; transition: var(--transition-fast);">Pricing</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 style="margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--secondary);">Resources</h4>
+                <ul style="display: flex; flex-direction: column; gap: 1rem;">
+                    <li><a href="#" style="color: var(--text-muted); font-size: 0.95rem; transition: var(--transition-fast);">Help Center</a></li>
+                    <li><a href="#" style="color: var(--text-muted); font-size: 0.95rem; transition: var(--transition-fast);">Blog</a></li>
+                    <li><a href="#" style="color: var(--text-muted); font-size: 0.95rem; transition: var(--transition-fast);">Success Stories</a></li>
+                </ul>
+            </div>
+            
+            <div>
+                <h4 style="margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--secondary);">Company</h4>
+                <ul style="display: flex; flex-direction: column; gap: 1rem;">
+                    <li><a href="#" style="color: var(--text-muted); font-size: 0.95rem; transition: var(--transition-fast);">About Us</a></li>
+                    <li><a href="#" style="color: var(--text-muted); font-size: 0.95rem; transition: var(--transition-fast);">Careers</a></li>
+                    <li><a href="#" style="color: var(--text-muted); font-size: 0.95rem; transition: var(--transition-fast);">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 2rem; border-top: 1px solid var(--border-light); flex-wrap: wrap; gap: 1rem;">
+            <p style="color: var(--text-muted); font-size: 0.9rem;">&copy;FreelancerPro. All rights reserved.</p>
+            <div style="display: flex; gap: 2rem;">
+                <a href="#" style="color: var(--text-muted); font-size: 0.9rem;">Privacy Policy</a>
+                <a href="#" style="color: var(--text-muted); font-size: 0.9rem;">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

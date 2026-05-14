@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Create Account — FreelancerPro{% endblock %}
+
+{% block content %}
+<div class="section-padding flex-center" style="min-height: calc(100vh - var(--navbar-height)); background: radial-gradient(circle at top left, var(--primary-soft), transparent), radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.05), transparent);">
+    <div class="card glass shadow-xl fade-in-up" style="max-width: 500px; width: 100%; padding: 3rem; border-radius: var(--radius-xl);">
+        <div style="text-align: center; margin-bottom: 2.5rem;">
+            <div class="logo-icon" style="font-size: 3rem; margin-bottom: 1rem; display: inline-block; padding: 1rem; background: var(--primary-soft); border-radius: 20px; color: var(--primary);">🚀</div>
+            <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem; color: var(--secondary);">Create Account</h1>
+            <p style="color: var(--text-muted); font-size: 1rem;">Join the future of digital work today.</p>
+        </div>
+
+        <form method="POST" action="{% url 'register' %}" id="register-form">
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger" style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid #ef4444; padding: 1rem; margin-bottom: 1.5rem; border-radius: 10px;">
+                    {% for error in form.non_field_errors %}
+                        <p style="color: #ef4444; font-size: 0.9rem; margin: 0; font-weight: 500;">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <div class="form-group">
+                <label class="form-label">I want to...</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <label style="cursor: pointer;">
+                        <input type="radio" name="role" value="client" {% if form.role.value == 'client' %}checked{% endif %} style="display: none;" id="role-client">
+                        <div class="role-card" onclick="selectRole('client')" id="card-client" 
+                             style="padding: 1.25rem; border: 2px solid {% if form.role.value == 'client' %}var(--primary){% else %}var(--border){% endif %}; border-radius: 15px; text-align: center; background: {% if form.role.value == 'client' %}var(--primary-soft){% else %}var(--surface){% endif %};">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🏢</div>
+                            <div style="font-weight: 700; font-size: 0.9rem; color: {% if form.role.value == 'client' %}var(--primary){% else %}var(--text-main){% endif %};">Hire Talent</div>
+                        </div>
+                    </label>
+                    <label style="cursor: pointer;">
+                        <input type="radio" name="role" value="freelancer" {% if form.role.value == 'freelancer' or not form.role.value %}checked{% endif %} style="display: none;" id="role-freelancer">
+                        <div class="role-card" onclick="selectRole('freelancer')" id="card-freelancer" 
+                             style="padding: 1.25rem; border: 2px solid {% if form.role.value == 'freelancer' or not form.role.value %}var(--primary){% else %}var(--border){% endif %}; border-radius: 15px; text-align: center; background: {% if form.role.value == 'freelancer' or not form.role.value %}var(--primary-soft){% else %}var(--surface){% endif %};">
+                            <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">👨‍💻</div>
+                            <div style="font-weight: 700; font-size: 0.9rem; color: {% if form.role.value == 'freelancer' or not form.role.value %}var(--primary){% else %}var(--text-main){% endif %};">Find Work</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="id_username">Username</label>
+                <div style="position: relative;">
+                    <i class="far fa-user" style="position: absolute; left: 1.25rem; top: 1.15rem; color: var(--text-muted);"></i>
+                    <input type="text" name="username" id="id_username" class="form-control" placeholder="kt" 
+                           value="{{ form.username.value|default:'' }}" style="padding-left: 3.2rem;" required>
+                </div>
+                {% if form.username.errors %}
+                    <p style="color: var(--danger); font-size: 0.8rem; margin-top: 0.4rem;">{{ form.username.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="id_email">Email Address</label>
+                <div style="position: relative;">
+                    <i class="far fa-envelope" style="position: absolute; left: 1.25rem; top: 1.15rem; color: var(--text-muted);"></i>
+                    <input type="email" name="email" id="id_email" class="form-control" placeholder="kt@example.com" 
+                           value="{{ form.email.value|default:'' }}" style="padding-left: 3.2rem;" required>
+                </div>
+                {% if form.email.errors %}
+                    <p style="color: var(--danger); font-size: 0.8rem; margin-top: 0.4rem;">{{ form.email.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="id_password1">Password</label>
+                <div style="position: relative;">
+                    <i class="fas fa-lock" style="position: absolute; left: 1.25rem; top: 1.15rem; color: var(--text-muted);"></i>
+                    <input type="password" name="password1" id="id_password1" class="form-control" placeholder="" style="padding-left: 3.2rem;" required>
+                </div>
+                {% if form.password1.errors %}
+                    <p style="color: var(--danger); font-size: 0.8rem; margin-top: 0.4rem;">{{ form.password1.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="id_password2">Confirm Password</label>
+                <div style="position: relative;">
+                    <i class="fas fa-shield-alt" style="position: absolute; left: 1.25rem; top: 1.15rem; color: var(--text-muted);"></i>
+                    <input type="password" name="password2" id="id_password2" class="form-control" placeholder="" style="padding-left: 3.2rem;" required>
+                </div>
+                {% if form.password2.errors %}
+                    <p style="color: var(--danger); font-size: 0.8rem; margin-top: 0.4rem;">{{ form.password2.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <div style="margin: 2rem 0;">
+                <label style="display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; font-size: 0.85rem; color: var(--text-muted);">
+                    <input type="checkbox" name="terms" style="width: 18px; height: 18px; accent-color: var(--primary); margin-top: 2px;" required>
+                    <span>I agree to the <a href="#" style="color: var(--primary); font-weight: 600;">Terms</a> and <a href="#" style="color: var(--primary); font-weight: 600;">Privacy Policy</a>.</span>
+                </label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%; border-radius: 12px; font-weight: 700;">
+                Get Started <i class="fas fa-arrow-right" style="margin-left: 0.5rem;"></i>
+            </button>
+        </form>
+
+        <div style="margin-top: 2rem; text-align: center; font-size: 0.95rem; color: var(--text-muted);">
+            Already have an account? <a href="{% url 'login' %}" style="color: var(--primary); font-weight: 700;">Sign In</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function selectRole(role) {
+        // Reset both
+        ['client', 'freelancer'].forEach(r => {
+            const card = document.getElementById('card-' + r);
+            const title = card.querySelector('div:nth-child(2)');
+            card.style.borderColor = 'var(--border)';
+            card.style.background = 'var(--surface)';
+            title.style.color = 'var(--text-main)';
+        });
+        
+        // Active one
+        const activeCard = document.getElementById('card-' + role);
+        const activeTitle = activeCard.querySelector('div:nth-child(2)');
+        activeCard.style.borderColor = 'var(--primary)';
+        activeCard.style.background = 'var(--primary-soft)';
+        activeTitle.style.color = 'var(--primary)';
+        
+        document.getElementById('role-' + role).checked = true;
+    }
+
+    // Initialize selection on load
+    window.onload = function() {
+        const checkedRole = document.querySelector('input[name="role"]:checked');
+        if (checkedRole) {
+            selectRole(checkedRole.value);
+        }
+    };
+</script>
+{% endblock %}

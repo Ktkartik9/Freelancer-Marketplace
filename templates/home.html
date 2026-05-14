@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home — FreelancerPro{% endblock %}
+
+{% block content %}
+<section class="hero fade-in-up">
+    <div class="container" style="display: flex; align-items: center; justify-content: space-between; gap: 4rem;">
+        <div class="hero-content" style="flex: 1;">
+            <div class="badge badge-primary pulse" style="margin-bottom: 1.5rem;">🚀 The Future of Work is Here</div>
+            <h1 class="hero-title">Hire the best <br><span style="color: var(--primary);">freelance talent</span> <br>for any job, online.</h1>
+            <p style="font-size: 1.25rem; color: var(--text-muted); margin-bottom: 2.5rem; max-width: 540px;">
+                Connect with professional freelancers around the world. From web development to digital marketing, find the expertise you need to grow your business.
+            </p>
+            <div style="display: flex; gap: 1rem;">
+                <a href="{% url 'register' %}" class="btn btn-primary btn-lg">Get Started</a>
+                <a href="{% url 'project_list' %}" class="btn btn-outline btn-lg">Browse Projects</a>
+            </div>
+            
+            <div style="margin-top: 4rem; display: flex; align-items: center; gap: 2rem;">
+                <div style="text-align: center;">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.25rem;">10k+</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Active Freelancers</p>
+                </div>
+                <div style="height: 40px; width: 1px; background: var(--border);"></div>
+                <div style="text-align: center;">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.25rem;">5k+</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Projects Completed</p>
+                </div>
+                <div style="height: 40px; width: 1px; background: var(--border);"></div>
+                <div style="text-align: center;">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.25rem;">4.9/5</h3>
+                    <p style="font-size: 0.85rem; color: var(--text-muted);">Client Rating</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="hero-image" style="flex: 1; position: relative;">
+            <div class="card glass shadow-xl" style="padding: 0; border-radius: var(--radius-xl); overflow: hidden;">
+                <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800" alt="Team working" style="width: 100%; height: 400px; object-fit: cover;">
+                <div style="padding: 2rem; position: relative;">
+                    <div class="badge badge-success" style="position: absolute; top: -1rem; right: 2rem; box-shadow: var(--shadow-md);">Live Projects</div>
+                    <h3 style="margin-bottom: 0.5rem;">Expert Developers Available</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Join thousands of businesses who trust FreelancerPro for their critical projects.</p>
+                </div>
+            </div>
+            <!-- Decorative Elements -->
+            <div style="position: absolute; -top: 2rem; -left: 2rem; width: 100px; height: 100px; background: var(--primary-soft); border-radius: 50%; z-index: -1;"></div>
+            <div style="position: absolute; bottom: -2rem; right: -2rem; width: 150px; height: 150px; background: rgba(34, 197, 94, 0.1); border-radius: 50%; z-index: -1;"></div>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding" style="background: var(--surface); transition: var(--transition-smooth);">
+    <div class="container">
+        <div style="text-align: center; margin-bottom: 4rem;">
+            <h2 style="font-size: 2.5rem; margin-bottom: 1rem;">Why choose FreelancerPro?</h2>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Everything you need to hire, manage and pay your freelance team in one secure platform.</p>
+        </div>
+        
+        <div class="grid">
+            <div class="card" style="text-align: center;">
+                <div class="stat-icon" style="margin: 0 auto 1.5rem; background: var(--primary-soft); color: var(--primary);">🛡️</div>
+                <h3>Secure Payments</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 1rem;">Only pay for work you authorize. Our secure payment system ensures peace of mind.</p>
+            </div>
+            <div class="card" style="text-align: center;">
+                <div class="stat-icon" style="margin: 0 auto 1.5rem; background: rgba(34, 197, 94, 0.1); color: var(--success);">⭐</div>
+                <h3>Quality Talent</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 1rem;">Access a hand-picked community of expert freelancers across hundreds of skill categories.</p>
+            </div>
+            <div class="card" style="text-align: center;">
+                <div class="stat-icon" style="margin: 0 auto 1.5rem; background: rgba(245, 158, 11, 0.1); color: var(--warning);">⚡</div>
+                <h3>Fast Turnaround</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 1rem;">Post a project and receive competitive bids within minutes. Get your work done faster.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-padding">
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem;">
+            <div>
+                <h2 style="font-size: 2.5rem;">Featured Projects</h2>
+                <p style="color: var(--text-muted); margin-top: 0.5rem;">Discover the latest opportunities on our marketplace.</p>
+            </div>
+            <a href="{% url 'project_list' %}" class="btn btn-outline">View All Projects <i class="fas fa-arrow-right"></i></a>
+        </div>
+        
+        <div class="grid">
+            {% for project in featured_projects %}
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                    <span class="badge badge-primary">${{ project.budget }}</span>
+                    <span style="font-size: 0.85rem; color: var(--text-muted);"><i class="far fa-calendar"></i> {{ project.deadline }}</span>
+                </div>
+                <h3 style="margin-bottom: 1rem;">{{ project.title }}</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                    {{ project.description }}
+                </p>
+                <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 1.5rem; border-top: 1px solid var(--border-light);">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <div style="width: 32px; height: 32px; background: var(--primary-soft); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.75rem;">
+                            {{ project.client.username|slice:":1"|upper }}
+                        </div>
+                        <span style="font-weight: 600; font-size: 0.9rem;">{{ project.client.username }}</span>
+                    </div>
+                    <a href="{% url 'project_detail' project.id %}" class="btn btn-primary btn-sm" style="padding: 0.5rem 1rem; border-radius: 8px;">View Detail</a>
+                </div>
+            </div>
+            {% empty %}
+            <p>No projects available yet. Be the first to post!</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section-padding" style="background: linear-gradient(135deg, var(--secondary) 0%, #1e293b 100%); color: white; border-radius: var(--radius-xl); margin: 0 1.5rem 6rem;">
+    <div class="container" style="text-align: center;">
+        <h2 style="color: white; font-size: 3rem; margin-bottom: 1.5rem;">Ready to get started?</h2>
+        <p style="color: #94a3b8; font-size: 1.25rem; margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+            Join FreelancerPro today and start building your dream project or career.
+        </p>
+        <div style="display: flex; gap: 1.5rem; justify-content: center;">
+            <a href="{% url 'register' %}" class="btn btn-primary btn-lg" style="background: white; color: var(--secondary); box-shadow: none;">Hire Talent</a>
+            <a href="{% url 'register' %}" class="btn btn-outline btn-lg" style="color: white; border-color: rgba(255,255,255,0.2);">Find Work</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
